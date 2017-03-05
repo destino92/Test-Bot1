@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
+const keys = require('./config/token.js')
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -28,5 +29,18 @@ app.get('/webhook/', function (req, res) {
 
 // Spin up the server
 app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
+    console.log('running on port', app.get('port'));
+})
+
+app.post('/webhook/', function (req, res) {
+  let messaging_events = req.body.entry[0].messaging
+  for (let i = 0; i < messaging_events.length; i++) {
+      let event = req.body.entry[0].messaging[i]
+      let sender = event.sender.id
+      if (event.message && event.message.text) {
+          let text = event.message.text
+          sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+      }
+  }
+  res.sendStatus(200)
 })
