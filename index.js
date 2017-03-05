@@ -4,7 +4,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const keys = require('./config/token.js')
 
 app.set('port', (process.env.PORT || 5000))
 
@@ -45,11 +44,13 @@ app.post('/webhook/', function (req, res) {
   res.sendStatus(200)
 })
 
+const token = "EAAD7xqBgFNEBAOudlaZA2PInH3ZATtBgTSV3TBtSwBDTpKOVVHSxOkrk1ioLCr9cdUK65kSmxQeZBsBE9DWresoQETEKtZC6Cm8mtpt4LUcZCfZCxTAkjxZBeEVnN48D8w7poNgha1u11ogynZCJCwR11JjBtmyhCN6ZAk05IQZBAlRwZDZD"
+
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:keys.token},
+        qs: {access_token:token},
         method: 'POST',
         json: {
             recipient: {id:sender},
